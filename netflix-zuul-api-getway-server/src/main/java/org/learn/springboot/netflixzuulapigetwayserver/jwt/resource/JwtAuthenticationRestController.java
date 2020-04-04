@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dto.JwtUserDetails;
+import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dto.User;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-//@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JwtAuthenticationRestController {
 
   @Value("${jwt.http.request.header}")
@@ -52,6 +53,9 @@ public class JwtAuthenticationRestController {
     authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
     final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+    if(userDetails instanceof User) {
+    	System.out.println("I am valid user");
+    }
 
     final String token = jwtTokenUtil.generateToken(userDetails);
 

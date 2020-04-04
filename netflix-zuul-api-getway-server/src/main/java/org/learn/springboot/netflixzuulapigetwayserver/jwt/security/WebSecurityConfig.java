@@ -1,5 +1,7 @@
 package org.learn.springboot.netflixzuulapigetwayserver.jwt.security;
 
+import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dao.UserRepository;
+import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.CustomAuthenticationProvider;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.JwtTokenAuthorizationOncePerRequestFilter;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.JwtUnAuthorizedResponseAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -34,20 +37,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private UserDetailsService jwtUserDetailsService;
     
+    @Autowired
+	private UserRepository userRepository;
+    
     @Value("${jwt.get.token.uri}")
     private String authenticationPath;
     
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(jwtUserDetailsService)
-            .passwordEncoder(passwordEncoderBean());
+		/*
+		 * auth .userDetailsService(jwtUserDetailsService)
+		 * .passwordEncoder(passwordEncoderBean());
+		 */
+    	auth.authenticationProvider(authProvider());
     }
 
     @Bean
-    public PasswordEncoder passwordEncoderBean() {
-        return new BCryptPasswordEncoder();
-    }
+	public DaoAuthenticationProvider authProvider() {
+		final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider(userRepository,
+				jwtUserDetailsService);
+		authProvider.setPasswordEncoder(encoder());
+		return authProvider;
+	}
+    
+    @Bean
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder(11);
+	}
+	/*
+	 * @Bean public PasswordEncoder passwordEncoderBean() { return new
+	 * BCryptPasswordEncoder(); }
+	 */
 
     @Bean
     @Override
