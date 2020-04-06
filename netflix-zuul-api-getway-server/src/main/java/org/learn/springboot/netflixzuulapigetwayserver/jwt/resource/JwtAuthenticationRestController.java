@@ -4,8 +4,6 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dto.JwtUserDetails;
-import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dto.User;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,13 +51,10 @@ public class JwtAuthenticationRestController {
     authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
     final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-    if(userDetails instanceof User) {
-    	System.out.println("I am valid user");
-    }
 
     final String token = jwtTokenUtil.generateToken(userDetails);
 
-    return ResponseEntity.ok(new JwtTokenResponse(token));
+    return ResponseEntity.ok(new JwtTokenResponse(token,userDetails));
   }
 
   @RequestMapping(value = "${jwt.refresh.token.uri}", method = RequestMethod.GET)
@@ -67,11 +62,11 @@ public class JwtAuthenticationRestController {
     String authToken = request.getHeader(tokenHeader);
     final String token = authToken.substring(7);
     String username = jwtTokenUtil.getUsernameFromToken(token);
-    JwtUserDetails user = (JwtUserDetails) userDetailsService.loadUserByUsername(username);
+    final UserDetails userDetails =  userDetailsService.loadUserByUsername(username);
 
     if (jwtTokenUtil.canTokenBeRefreshed(token)) {
       String refreshedToken = jwtTokenUtil.refreshToken(token);
-      return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
+      return ResponseEntity.ok(new JwtTokenResponse(refreshedToken,userDetails));
     } else {
       return ResponseEntity.badRequest().body(null);
     }
