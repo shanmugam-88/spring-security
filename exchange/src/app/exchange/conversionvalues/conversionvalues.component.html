@@ -1,0 +1,34 @@
+<div class="alert alert-warning" *ngIf='errorMessageStatus'>{{errorMessage}}</div>
+
+<br/><br/>
+<div class="container" *ngIf="processStatus">
+    <h4>Exchange Rate</h4>
+<table class="table">
+    <thead>
+        <tr>
+           <th>From</th>
+           <th>To</th>
+           <th>ConversionMultiple</th>
+           <th>Update</th>
+           <th>Delete</th>
+        </tr>
+        
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of exchangeData">
+        <td>
+            {{data.from}}
+        </td>
+        <td>
+            {{data.to}}
+        </td>
+        <td>{{data.conversionMultiple}}</td>
+        <td><button (click)="updateExchangeValue(data.id)" class="btn btn-success">Update</button></td>
+        <td><button (click)="deleteExchangeValue(data.id)" class="btn btn-warning">Delete</button></td>
+    </tr>
+    </tbody>
+</table>
+<div class="row">
+    <button (click)="addExchange()" class="btn btn-success">Add</button>
+</div>
+</div>

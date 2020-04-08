@@ -1,0 +1,35 @@
+<p>updatevalues works!</p>
+
+<H1>Exchange Details</H1>
+
+<div class="container">
+  <div class="alert alert-warning" *ngIf="todoForm.dirty && todoForm.invalid">Enter valid values</div>
+  <div class="alert alert-warning" *ngIf="todoForm.dirty && from.invalid">Enter atleast 3 characters in From</div>
+  <div class="alert alert-warning" *ngIf="todoForm.dirty && to.invalid">Enter atleast 5 characters in To</div>
+  <div class="alert alert-warning" *ngIf="todoForm.dirty && conversionMultiple.invalid">Enter atleast 1 characters in To</div>
+  
+  <form (ngSubmit)="!todoForm.invalid && saveExchangeValue()" #todoForm="ngForm">
+    <fieldset class="form-group">
+      <label>From</label>
+      <input type="text" #from="ngModel" 
+            [(ngModel)]="exchangeValue.from" class="form-control" 
+                name="from" required="required" minlength="3">
+    </fieldset>
+
+    <fieldset class="form-group">
+        <label>To</label>
+        <input type="To" #to="ngModel" 
+              [(ngModel)]="exchangeValue.to" class="form-control" 
+                  name="to" required="required" minlength="3">
+    </fieldset>
+
+    <fieldset class="form-group">
+        <label>ConversionMultiple</label>
+        <input type="ConversionMultiple" #conversionMultiple="ngModel" 
+              [(ngModel)]="exchangeValue.conversionMultiple" class="form-control" 
+                  name="conversionMultiple" required="required" minlength="1">
+    </fieldset>
+
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>  
+</div>

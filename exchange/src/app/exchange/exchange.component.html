@@ -1,0 +1,39 @@
+<div class="alert alert-warning" *ngIf='errorMessageStatus'>{{errorMessage}}</div>
+<div>
+    From : <input type="text" name="from" [(ngModel)]="from"/>
+    To : <input type="text" name="to" [(ngModel)]="to">
+    Quantity : <input type="text" name="quantity" [(ngModel)]="quantity">&nbsp;
+    <button class="btn btn-success" (click)=convertIt()>Convert</button>
+</div>
+<br/><br/>
+<div class="container" *ngIf="processStatus">
+    <h4>Converted Values</h4>
+<table class="table">
+    <thead>
+        <tr>
+           <th>From</th>
+           <th>To</th>
+           <th>quantity</th>
+           <th>CalculatedValue</th>
+           <th>ConversionMultiple</th>
+        </tr>
+        
+    </thead>
+    <tbody>
+        <tr>
+        <td>
+            {{data.from}}
+        </td>
+        <td>
+            {{data.to}}
+        </td>
+        <td>{{data.quantity}}</td>
+        <td>
+            {{data.totalCalculatedValue}}
+        </td>
+        <td>{{data.conversionMultiple}}</td>
+        
+    </tr>
+    </tbody>
+</table>
+</div>
