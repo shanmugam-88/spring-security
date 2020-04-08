@@ -1,5 +1,8 @@
 package org.learn.springboot.netflixzuulapigetwayserver.jwt.security;
 
+//import javax.servlet.http.HttpServletResponse;
+
+//import org.h2.util.json.JSONObject;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.dao.UserRepository;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.CustomAuthenticationProvider;
 import org.learn.springboot.netflixzuulapigetwayserver.jwt.security.util.JwtTokenAuthorizationOncePerRequestFilter;
@@ -21,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 
 
@@ -77,20 +81,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+		
+		httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+	
 		httpSecurity
 		.csrf().disable()
 		.exceptionHandling().authenticationEntryPoint(jwtUnAuthorizedResponseAuthenticationEntryPoint).and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests()
-        .anyRequest().authenticated();
+		/*.antMatchers(HttpMethod.DELETE, "/currency-conversion-service/currency-converter-exchange-value/**").hasAnyRole("ADMIN")
+		.and().exceptionHandling().authenticationEntryPoint((request, response, e) -> {
+            //response.setContentType("application/json;charset=UTF-8");
+            //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Need a root permission to accress this URL");
+            
+        }).and()*/
+		.and().authorizeRequests()
+		.anyRequest().authenticated();
+        
 		
 		httpSecurity
         .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+			
 		
 		httpSecurity
         .headers()
         .frameOptions().sameOrigin()  //H2 Console Needs this setting
         .cacheControl(); //disable caching
+		        
 	}
 	
 	@Override
