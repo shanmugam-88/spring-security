@@ -82,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 		
-		httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+		//httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
 	
 		httpSecurity
 		.csrf().disable()
@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Need a root permission to accress this URL");
             
         }).and()*/
-		.and().authorizeRequests()
+		//.and().authorizeRequests()
 		.anyRequest().authenticated();
         
 		
