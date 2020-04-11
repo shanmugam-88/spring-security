@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.learn.springboot</groupId>
 	<artifactId>currency-exchange-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version><!-- -SNAPSHOT -->
 	<name>currency-exchange-service</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -85,32 +85,45 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>currency-exchange-service</finalName>
+		<finalName>currency-exchange-service-${project.version}</finalName>
 		<plugins>
-			 <plugin>
-                                <groupId>com.spotify</groupId>
-                                <artifactId>dockerfile-maven-plugin</artifactId>
-                                <version>1.4.10</version>
-                                <executions>
-                                        <execution>
-                                                <id>default</id>
-                                                <goals>
-                                                        <goal>build</goal>
-                                                </goals>
-                                        </execution>
-                                </executions>
-                                <configuration>
-                                        <repository>shanmugam88/${project.name}</repository>
-                                        <tag>${project.version}</tag>
-                                        <skipDockerInfo>true</skipDockerInfo>
-                                </configuration>
-                        </plugin>
-
+		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!--<configuration>
+					<mainClass>org.springframework.boot.currencyexchangeservice.CurrencyExchangeServiceApplication</mainClass>
+				</configuration>-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-		</plugins>
+					
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.10</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<!-- <goal>push</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>shanmugam88/${project.name}</repository>
+					<tag>${project.version}</tag>
+					<skipDockerInfo>true</skipDockerInfo>
+				</configuration>
+			</plugin>
+			
+					</plugins>
 	</build>
-
+	
 </project>

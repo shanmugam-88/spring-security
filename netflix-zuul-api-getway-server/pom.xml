@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.learn.springboot</groupId>
 	<artifactId>netflix-zuul-api-getway-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version><!--  -SNAPSHOT -->
 	<name>netflix-zuul-api-getway-server</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -89,10 +89,30 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>eureka-gatway-server-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.10</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<!-- <goal>push</goal> -->
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>shanmugam88/${project.name}</repository>
+					<tag>${project.version}</tag>
+					<skipDockerInfo>true</skipDockerInfo>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
